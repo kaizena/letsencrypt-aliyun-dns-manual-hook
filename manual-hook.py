@@ -11,12 +11,13 @@ CONFIG_FILENAME = 'config.ini'
 
 
 def getAliyunDnsInstance():
-    configFilepath = os.path.split(os.path.realpath(__file__))[0] + os.path.sep + CONFIG_FILENAME
+    if not os.environ.has_key('ALIYUN_APP_ID'):
+        raise Exception('Environment variable ALIYUN_APP_ID is empty.')
+    if not os.environ.has_key('ALIYUN_APP_SECRET'):
+        raise Exception('Environment variable ALIYUN_APP_SECRET is empty.')
 
-    config = ConfigParser.ConfigParser()
-    config.read(configFilepath)
-    appid = config.get('aliyun', 'appid')
-    appsecret = config.get('aliyun', 'appsecret')
+    appid = os.environ['ALIYUN_APP_ID']
+    appsecret = os.environ['ALIYUN_APP_SECRET']
 
     return aliyun.AliyunDns(appid, appsecret)
 
